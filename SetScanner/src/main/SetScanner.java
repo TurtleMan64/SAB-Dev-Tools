@@ -12,13 +12,14 @@ public class SetScanner
 
 	public static void main(String[] args)
 	{
-		String s = "SET/MetalHarborSET.txt";
+		String s = "SET/SpeedHighwayAct1SET.txt";
 		File file = new File(s);
 
 		try
 		{
-			out = new PrintWriter("Output/MetalHarborObjects.txt", "UTF-8");
-			out.println("#Generated Objects");
+			out = new PrintWriter("Output/SpeedHighwayAct1Objects.txt", "UTF-8");
+			out.println("######## Generated Objects ########");
+			out.println();
 			Scanner input = new Scanner(file);
 
 			while (input.hasNextLine())
@@ -37,8 +38,8 @@ public class SetScanner
 				
 				//parseTwinkleParkAct2 (type, xrot, yrot, zrot, x, y, z, var1, var2, var3);
 				//parseEmeraldCoastAct2(type, xrot, yrot, zrot, x, y, z, var1, var2, var3);
-				//parseSpeedHighwayAct1(type, xrot, yrot, zrot, x, y, z, var1, var2, var3);
-				parseMetalHarbor     (type, xrot, yrot, zrot, x, y, z, var1, var2, var3);
+				parseSpeedHighwayAct1(type, xrot, yrot, zrot, x, y, z, var1, var2, var3);
+				//parseMetalHarbor     (type, xrot, yrot, zrot, x, y, z, var1, var2, var3);
 			}
 			
 			input.close();
@@ -72,15 +73,15 @@ public class SetScanner
 		}
 		else if (type.equals("4") || type.equals("5") || type.equals("6")) //Spring
 		{
-			outSpring(x, y, z, xrot, yrot, zrot, var1, var2, var3);
+			outSpringSADX(x, y, z, xrot, yrot, zrot, var1, var2, var3);
 		}
 		else if (type.equals("7")) //Dashpad
 		{
-			outDashpad(x, y, z, xrot, yrot, zrot, var1, var2, var3);
+			outDashpadSADX(x, y, z, xrot, yrot, zrot, var1, var2, var3);
 		}
 		else if (type.equals("9")) //Spikeball
 		{
-			outSpikeballSpin(x, y, z, xrot, yrot, zrot, var1, var2, var3);
+			outSpikeballSpinSADX(x, y, z, xrot, yrot, zrot, var1, var2, var3);
 		}
 		else if (type.equals("F") || type.equals("10")) //Item box
 		{
@@ -101,31 +102,31 @@ public class SetScanner
 		
 		if (type.equals("0") || type.equals("55"))    //single ring
 		{         
-			outSingleRing(x, y, z, xrot, yrot, zrot, var1, var2, var3);
+			//outSingleRing(x, y, z, xrot, yrot, zrot, var1, var2, var3);
 		}
 		else if (type.equals("1")) //line of rings
 		{
-			outRingGroupSADX(x, y, z, xrot, yrot, zrot, var1, var2, var3);
+			//outRingGroupSADX(x, y, z, xrot, yrot, zrot, var1, var2, var3);
 		}
 		else if (type.equals("4") || type.equals("5") || type.equals("6")) //Spring
 		{
-			outSpring(x, y, z, xrot, yrot, zrot, var1, var2, var3);
+			//outSpringSADX(x, y, z, xrot, yrot, zrot, var1, var2, var3);
 		}
 		else if (type.equals("7")) //Dashpad
 		{
-			outDashpad(x, y, z, xrot, yrot, zrot, var1, var2, var3);
+			outDashpadSADX(x, y, z, xrot, yrot, zrot, var1, 40, var3);
 		}
 		else if (type.equals("9")) //Spikeball
 		{
-			outSpikeballSpin(x, y, z, xrot, yrot, zrot, var1, var2, var3);
+			//outSpikeballSpinSADX(x, y, z, xrot, yrot, zrot, var1, var2, var3);
 		}
 		else if (type.equals("47") || type.equals("48")) //Floating Pad
 		{
-			out.println("50 "+x+" "+(y+6)+" "+z+" "+yrot);
+			//out.println("50 "+x+" "+(y+6)+" "+z+" "+yrot);
 		}
 		else if (type.equals("F") || type.equals("10")) //Item box
 		{
-			outItemCapsuleSADX(x, y, z, xrot, yrot, zrot, var1, var2, var3);
+			//outItemCapsuleSADX(x, y, z, xrot, yrot, zrot, var1, var2, var3);
 		}
 	}
 	
@@ -148,15 +149,15 @@ public class SetScanner
 		}
 		else if (type.equals("1") || type.equals("2")) //Spring
 		{
-			outSpring(x, y, z, xrot, yrot, zrot, var1, var2, var3);
+			outSpringSADX(x, y, z, xrot, yrot, zrot, var1, var2, var3);
 		}
 		else if (type.equals("3")) //Dashpad
 		{
-			outDashpad(x, y, z, xrot, yrot, zrot, var1, var2, var3);
+			outDashpadSADX(x, y, z, xrot, yrot, zrot, var1, var2, var3);
 		}
 		else if (type.equals("4")) //Spikeball Spinnin
 		{
-			outSpikeballSpin(x, y, z, xrot, yrot, zrot, var1, var2, var3);
+			outSpikeballSpinSADX(x, y, z, xrot, yrot, zrot, var1, var2, var3);
 		}
 		else if (type.equals("27")) //Water Platform
 		{
@@ -198,47 +199,47 @@ public class SetScanner
 		
 		if (type.equals("0"))    //single ring
 		{         
-			outSingleRing(x, y, z, xrot, yrot, zrot, var1, var2, var3);
+			//outSingleRing(x, y, z, xrot, yrot, zrot, var1, var2, var3);
 		}
 		else if (type.equals("15")) //line of rings
 		{
-			outRingGroupSADX(x, y, z, xrot, yrot, zrot, var1, var2, var3);
+			//outRingGroupSADX(x, y, z, xrot, yrot, zrot, var1, var2, var3);
 		}
 		else if (type.equals("1") || type.equals("2")) //Spring
 		{
-			outSpring(x, y, z, xrot, yrot, zrot, var1, var2, var3);
+			//outSpringSADX(x, y, z, xrot, yrot, zrot, var1, var2, var3);
 		}
 		else if (type.equals("3")) //Dashpad
 		{
-			outDashpad(x, y, z, xrot, yrot, zrot, var1, var2, var3);
+			outDashpadSADX(x, y, z, xrot, yrot, zrot, var1, var2, var3);
 		}
 		else if (type.equals("4")) //Spikeball Spinnin
 		{
-			outSpikeballSpin(x, y, z, xrot, yrot, zrot, var1, var2, var3);
+			//outSpikeballSpinSADX(x, y, z, xrot, yrot, zrot, var1, var2, var3);
 		}
 		else if (type.equals("27")) //Water Platform
 		{
-			out.println("50 "+x+" "+(y+6)+" "+z+" "+yrot);
+			//out.println("50 "+x+" "+(y+6)+" "+z+" "+yrot);
 		}
 		else if (type.equals("31")) //Horizontal Palmtree
 		{
-			out.println("50 "+x+" "+(y+6)+" "+z+" "+yrot);
+			//out.println("50 "+x+" "+(y+6)+" "+z+" "+yrot);
 		}
 		else if (type.equals("42")) //Big Rock
 		{
-			outBigRock(x, y, z, xrot, yrot, zrot, var1, var2, var3);
+			//outBigRock(x, y, z, xrot, yrot, zrot, var1, var2, var3);
 		}
 		else if (type.equals("24")) //Rock Platform
 		{
-			outRockPlatform(x, y, z, xrot, yrot, zrot, var1, var2, var3);
+			//outRockPlatform(x, y, z, xrot, yrot, zrot, var1, var2, var3);
 		}
 		else if (type.equals("37") || type.equals("38")) //Seagull
 		{
-			outSeagull(x, y, z, xrot, yrot, zrot, var1, var2, var3);
+			//outSeagull(x, y, z, xrot, yrot, zrot, var1, var2, var3);
 		}
 		else if (type.equals("D") || type.equals("52")) //Item Box
 		{
-			outItemCapsuleSADX(x, y, z, xrot, yrot, zrot, var1, var2, var3);
+			//outItemCapsuleSADX(x, y, z, xrot, yrot, zrot, var1, var2, var3);
 		}
 	}
 	
@@ -258,18 +259,18 @@ public class SetScanner
 		}
 		else if (type.equals("1") || type.equals("2") || type.equals("10")) //Spring
 		{
-			outSpring(x, y, z, xrot, yrot, zrot, var1, var2, var3);
+			outSpringSADX(x, y, z, xrot, yrot, zrot, var1, var2, var3);
 		}
 		else if (type.equals("3")) //Dashpad
 		{
 			if (x < 300 || x > 2000)
-				outDashpad(x, y, z, xrot, yrot, zrot, var1, var2, var3);
+				outDashpadSADX(x, y, z, xrot, yrot, zrot, var1, var2, var3);
 		}
 		else if (type.equals("4")) //Spikeball Spin
 		{
-			outSpikeballSpin(x, y, z, xrot, yrot, zrot, var1, var2, var3);
+			outSpikeballSpinSADX(x, y, z, xrot, yrot, zrot, var1, var2, var3);
 		}
-		else if (type.equals("5C")) //Spinner
+		else if (type.equals("5C") || type.equals("5D") || type.equals("5E") || type.equals("5F") || type.equals("60") || type.equals("61")) //Spinner attack, Spinner float, Spinner electric, cop, unidusA, unidusB
 		{
 			outSpinner(x, y, z, xrot, yrot, zrot, var1, var2, var3);
 		}
@@ -280,6 +281,22 @@ public class SetScanner
 		else if (type.equals("D") || type.equals("74")) //Item Box
 		{
 			outItemCapsuleSADX(x, y, z, xrot, yrot, zrot, var1, var2, var3);
+		}
+		else if (type.equals("43"))
+		{
+			outLamppost(x, y, z, xrot, yrot, zrot, var1, var2, var3);
+		}
+		else if (type.equals("49")) //Traffic Cone A
+		{
+			out.println("67 "+x+" "+y+" "+z+" "+xrot+" "+yrot+" "+zrot+" 0");
+		}
+		else if (type.equals("4A")) //Traffic Cone B
+		{
+			out.println("67 "+x+" "+y+" "+z+" "+xrot+" "+yrot+" "+zrot+" 1");
+		}
+		else if (type.equals("21")) //Searchlight
+		{
+			out.println("68 "+x+" "+y+" "+z+" "+xrot+" "+yrot+" "+zrot);
 		}
 	}
 	
@@ -306,9 +323,16 @@ public class SetScanner
 		{
 			outRingCircleSA2(x, y, z, xrot, yrot, zrot, var1, var2, var3);
 		}
-		else if (type.equals("3") || type.equals("4") || type.equals("5")) //Spring
+		else if (type.equals("3") || type.equals("4")) //Spring
 		{
-			outSpring(x, y, z, xrot, yrot, zrot, var1, var2, var3);
+			if (x < 2782 || z < -3435)
+			{
+				outSpringSA2(x, y, z, xrot, yrot, zrot, var1, var2, var3);
+			}
+		}
+		else if (type.equals("5")) //3 Springs
+		{
+			outTripleSpringSA2(x, y, z, xrot, yrot, zrot, var1, var2, var3);
 		}
 		else if (type.equals("7")) //Dashpad
 		{
@@ -320,7 +344,7 @@ public class SetScanner
 		}
 		else if (type.equals("37")) //Spikeball Spin
 		{
-			outSpikeballSpin(x, y, z, xrot, yrot, zrot, var1, var2, var3);
+			outSpikeballSpinSA2(x, y, z, xrot, yrot, zrot, var1, var2, var3);
 		}
 		else if (type.equals("A") || type.equals("B")) //Item Box
 		{
@@ -357,9 +381,13 @@ public class SetScanner
 		{
 			outRingCircleSA2(x, y, z, xrot, yrot, zrot, var1, var2, var3);
 		}
-		else if (type.equals("3") || type.equals("4") || type.equals("5")) //Spring
+		else if (type.equals("3") || type.equals("4")) //Spring
 		{
-			outSpring(x, y, z, xrot, yrot, zrot, var1, var2, var3);
+			outSpringSA2(x, y, z, xrot, yrot, zrot, var1, var2, var3);
+		}
+		else if (type.equals("5")) //3 Springs
+		{
+			outTripleSpringSA2(x, y, z, xrot, yrot, zrot, var1, var2, var3);
 		}
 		else if (type.equals("7")) //Dashpad
 		{
@@ -371,7 +399,7 @@ public class SetScanner
 		}
 		else if (type.equals("37")) //Spikeball Spin
 		{
-			outSpikeballSpin(x, y, z, xrot, yrot, zrot, var1, var2, var3);
+			outSpikeballSpinSA2(x, y, z, xrot, yrot, zrot, var1, var2, var3);
 		}
 		else if (type.equals("A") || type.equals("B")) //Item Box
 		{
@@ -404,9 +432,13 @@ public class SetScanner
 		{
 			outRingCircleSA2(x, y, z, xrot, yrot, zrot, var1, var2, var3);
 		}
-		else if (type.equals("3") || type.equals("4") || type.equals("5")) //Spring
+		else if (type.equals("3") || type.equals("4")) //Spring
 		{
-			outSpring(x, y, z, xrot, yrot, zrot, var1, var2, var3);
+			outSpringSA2(x, y, z, xrot, yrot, zrot, var1, var2, var3);
+		}
+		else if (type.equals("5")) //3 Springs
+		{
+			outTripleSpringSA2(x, y, z, xrot, yrot, zrot, var1, var2, var3);
 		}
 		else if (type.equals("7")) //Dashpad
 		{
@@ -418,7 +450,7 @@ public class SetScanner
 		}
 		else if (type.equals("37")) //Spikeball Spin
 		{
-			outSpikeballSpin(x, y, z, xrot, yrot, zrot, var1, var2, var3);
+			outSpikeballSpinSA2(x, y, z, xrot, yrot, zrot, var1, var2, var3);
 		}
 		else if (type.equals("A") || type.equals("B")) //Item Box
 		{
@@ -536,7 +568,7 @@ public class SetScanner
 		}
 	}
 	
-	public static void outSpring(float x, float y, float z, float rotX, float rotY, float rotZ, float var1, float var2, float var3)
+	public static void outSpringSADX(float x, float y, float z, float rotX, float rotY, float rotZ, float var1, float var2, float var3)
 	{
 		Vector3f look = new Vector3f(0, 10, 0);
 		
@@ -546,27 +578,77 @@ public class SetScanner
 		float angH = (float)Math.toDegrees(Math.atan2(-look.z, look.x));
 		float angV = (float)Math.toDegrees(Math.atan2(look.y, Math.sqrt(look.x*look.x+look.z*look.z)));
 		
-		out.println("1 "+x+" "+y+" "+z+" "+(angH)+" "+(angV)+" "+(Math.max(var2, 8))+" "+"40");
+		float time  = Math.max(40, var1);
+		float power = Math.max(5.5f, var2);
+		
+		out.println("1 "+x+" "+y+" "+z+" "+(angH)+" "+(angV)+" "+power+" "+time);
 	}
 	
-	public static void outDashpad(float x, float y, float z, float rotX, float rotY, float rotZ, float var1, float var2, float var3)
+	public static void outSpringSA2(float x, float y, float z, float rotX, float rotY, float rotZ, float var1, float var2, float var3)
 	{
-		Vector3f look = endPointSADX(rotX, rotY, rotZ, 10);
+		Vector3f look = new Vector3f(0, 10, 0);
+		
+		rotateAboutXAxis(look, rotX);
+		rotateAboutZAxis(look, rotZ);
 		
 		float angH = (float)Math.toDegrees(Math.atan2(-look.z, look.x));
 		float angV = (float)Math.toDegrees(Math.atan2(look.y, Math.sqrt(look.x*look.x+look.z*look.z)));
 		
-		out.println("2 "+x+" "+(y+2)+" "+z+" "+(angH)+" "+(angV)+" "+(13)+" "+(angH)+" "+"20");
+		out.println("1 "+x+" "+y+" "+z+" "+(angH)+" "+(angV)+" "+(Math.max(var2, 5.5f))+" "+"40");
+	}
+	
+	public static void outTripleSpringSA2(float x, float y, float z, float rotX, float rotY, float rotZ, float var1, float var2, float var3)
+	{
+		Vector3f look = new Vector3f(0, 10, 0);
+		
+		rotateAboutXAxis(look, rotX);
+		rotateAboutZAxis(look, rotZ);
+		
+		float angH = (float)Math.toDegrees(Math.atan2(-look.z, look.x));
+		float angV = (float)Math.toDegrees(Math.atan2(look.y, Math.sqrt(look.x*look.x+look.z*look.z)));
+		
+		out.println("1 "+x+" "+y+" "+z+" "+(angH)+" "+(angV)+" "+(Math.max(var1, 4))+" "+"40");
+	}
+	
+	public static void outDashpadSADX(float x, float y, float z, float rotX, float rotY, float rotZ, float var1, float var2, float var3)
+	{
+		//Vector3f look = endPointSADX(rotX, rotY, rotZ, 10);
+		
+		//float angH = (float)Math.toDegrees(Math.atan2(-look.z, look.x));
+		//float angV = (float)Math.toDegrees(Math.atan2(look.y, Math.sqrt(look.x*look.x+look.z*look.z)));
+		
+		float power = var1;
+		float time = var2;
+		if (power <= 0)
+		{
+			power = 14;
+		}
+		
+		if (time <= 0)
+		{
+			time = 40;
+		}
+		if (time > 40)
+		{
+			time = 40;
+		}
+		
+		//out.println("2 "+x+" "+(y+2)+" "+z+" "+(angH)+" "+(angV)+" "+(power)+" "+(angH)+" "+time);
+		
+		out.println("2 "+x+" "+(y+1)+" "+z+" "+(rotX)+" "+(rotY-90)+" "+rotZ+" "+(power)+" "+(rotY-90)+" "+time);
+		
 	}
 	
 	public static void outDashpadSA2(float x, float y, float z, float rotX, float rotY, float rotZ, float var1, float var2, float var3)
 	{
-		Vector3f look = endPointSADX(rotX, rotY, rotZ, 10);
+		//Vector3f look = endPointSADX(rotX, rotY, rotZ, 10);
 		
-		float angH = (float)Math.toDegrees(Math.atan2(-look.z, look.x));
-		float angV = (float)Math.toDegrees(Math.atan2(look.y, Math.sqrt(look.x*look.x+look.z*look.z)));
+		//float angH = (float)Math.toDegrees(Math.atan2(-look.z, look.x));
+		//float angV = (float)Math.toDegrees(Math.atan2(look.y, Math.sqrt(look.x*look.x+look.z*look.z)));
 		
-		out.println("2 "+x+" "+(y+2)+" "+z+" "+(angH)+" "+(angV)+" "+(var1)+" "+(angH)+" "+Math.round(var2));
+		float power = Math.max(var1, 7);
+		
+		out.println("2 "+x+" "+(y+1)+" "+z+" "+(rotX)+" "+(rotY-90)+" "+rotZ+" "+(power)+" "+(rotY-90)+" "+20);
 	}
 	
 	public static void outSpinner(float x, float y, float z, float rotX, float rotY, float rotZ, float var1, float var2, float var3)
@@ -574,9 +656,21 @@ public class SetScanner
 		out.println("28 "+x+" "+(y)+" "+z);
 	}
 	
-	public static void outSpikeballSpin(float x, float y, float z, float rotX, float rotY, float rotZ, float var1, float var2, float var3)
+	public static void outSpikeballSpinSADX(float x, float y, float z, float rotX, float rotY, float rotZ, float var1, float var2, float var3)
 	{
 		out.println("47 "+x+" "+(y)+" "+z+" "+( var1*5+35)+" "+rotY);
+	}
+	
+	public static void outSpikeballSpinSA2(float x, float y, float z, float rotX, float rotY, float rotZ, float var1, float var2, float var3)
+	{
+		float radius = var1;
+		float speed = var2;
+		if (Math.round(var1) == -1) //-1 means stationary
+		{
+			speed = 0;
+			radius = 0;
+		}
+		out.println("47 "+x+" "+(y)+" "+z+" "+radius+" "+speed);
 	}
 	
 	public static void outTurnAsi(float x, float y, float z, float rotX, float rotY, float rotZ, float var1, float var2, float var3)
@@ -664,6 +758,11 @@ public class SetScanner
 		}
 		
 		out.println("27 "+x+" "+(y)+" "+z+" "+(rotY)+" "+rotZ+" "+type);
+	}
+	
+	public static void outLamppost(float x, float y, float z, float rotX, float rotY, float rotZ, float var1, float var2, float var3)
+	{
+		out.println("66 "+x+" "+y+" "+z+" "+rotX+" "+rotY+" "+rotZ);
 	}
 	
 	public static Vector3f endPointSADX(float rotX, float rotY, float rotZ, float radius)
