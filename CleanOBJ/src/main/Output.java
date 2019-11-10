@@ -13,9 +13,10 @@ public class Output
 		{
 			PrintWriter writer = new PrintWriter(fileName, "UTF-8");
 			int size = newFile.size();
-			for(int i = 0; i < size; i++)
+			for (int i = 0; i < size; i++)
 			{
-				writer.println(newFile.get(i));
+				writer.print(newFile.get(i));
+				writer.print('\n');
 			}
 			writer.close();
 		}

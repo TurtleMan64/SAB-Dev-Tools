@@ -1,15 +1,19 @@
 package main;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Set;
 
 public class Fixer 
 {
 	//Removes triangles that are at the same spot
 	public static ArrayList<String> fixOBJ(ArrayList<String> rawFile)
 	{
+		System.out.println("Removing triangles in the same location... ");
 		String material = "";
 		ArrayList<String> verticies = new ArrayList<String>();
 		ArrayList<String> textures = new ArrayList<String>();
@@ -211,6 +215,8 @@ public class Fixer
 			faces.remove(0);
 		}
 		
+		System.out.println("done.");
+		
 		return newFile;
 	}
 	
@@ -218,6 +224,8 @@ public class Fixer
 	//are part of the same group
 	public static void organizeOBJ(ArrayList<String> rawFile)
 	{
+		System.out.print("Grouping usemtl groups in obj file... ");
+		
 		String materialFile = "";
 		String currMaterial = "";
 		ArrayList<String> verticies = new ArrayList<String>();
@@ -297,6 +305,184 @@ public class Fixer
 				group.remove(0);
 			}
 		}
+		
+		System.out.println("done.");
+	}
+	
+	//Trim trailing zeroes off of vertex positions
+	public static void optimizePositions(ArrayList<String> rawFile)
+	{
+		System.out.print("Removing trailing zeroes on positions... ");
+		String materialFile = "";
+		ArrayList<String> verticies = new ArrayList<String>();
+		ArrayList<String> textures = new ArrayList<String>();
+		ArrayList<String> normals = new ArrayList<String>();
+		ArrayList<String> faces = new ArrayList<String>();
+		
+		int size = rawFile.size();
+		for (int i = 0; i < size; i++)
+		{
+			String currLine = rawFile.get(i);
+			if (currLine.startsWith("mtllib"))
+			{
+				materialFile = currLine;
+			}
+			else if (currLine.startsWith("v "))
+			{
+				//strip trailing zeroes first
+				String[] lineSplit = currLine.split(" ");
+				String newLine = "v";
+				for (int x = 1; x < lineSplit.length; x++)
+				{
+					BigDecimal coordinate = new BigDecimal(lineSplit[x]).stripTrailingZeros();
+					newLine = newLine + " " + coordinate.toPlainString();
+				}
+				
+				verticies.add(newLine);
+			}
+			else if (currLine.startsWith("vn"))
+			{
+				normals.add(currLine);
+			}
+			else if (currLine.startsWith("vt"))
+			{
+				textures.add(currLine);
+			}
+			else if (currLine.startsWith("usemtl"))
+			{
+				faces.add(currLine);
+			}
+			else if (currLine.startsWith("f"))
+			{
+				faces.add(currLine);
+			}
+		}
+		
+		rawFile.clear();
+		
+		rawFile.add(materialFile);
+		
+		for (int i = 0; i < verticies.size(); i++)
+		{
+			rawFile.add(verticies.get(i));
+		}
+		for (int i = 0; i < textures.size(); i++)
+		{
+			rawFile.add(textures.get(i));
+		}
+		for (int i = 0; i < normals.size(); i++)
+		{
+			rawFile.add(normals.get(i));
+		}
+		for (int i = 0; i < faces.size(); i++)
+		{
+			rawFile.add(faces.get(i));
+		}
+		System.out.println("done.");
+	}
+	
+	//remove duplicate UV entries
+	public static void optimizeUVs(ArrayList<String> rawFile)
+	{
+		System.out.print("Removing duplicate UV's... ");
+		String materialFile = "";
+		ArrayList<String> verticies = new ArrayList<String>();
+		ArrayList<String> texturesRAW = new ArrayList<String>();
+		Set<String> alreadyUsedUVs = new HashSet<String>();
+		ArrayList<String> texturesNEW = new ArrayList<String>();
+		ArrayList<String> normals = new ArrayList<String>();
+		ArrayList<String> faces = new ArrayList<String>();
+		
+		int size = rawFile.size();
+		for (int i = 0; i < size; i++)
+		{
+			String currLine = rawFile.get(i);
+			if (currLine.startsWith("mtllib"))
+			{
+				materialFile = currLine;
+			}
+			else if (currLine.startsWith("v "))
+			{
+				verticies.add(currLine);
+			}
+			else if (currLine.startsWith("vn"))
+			{
+				normals.add(currLine);
+			}
+			else if (currLine.startsWith("vt"))
+			{
+				//strip trailing zeroes first
+				String[] lineSplit = currLine.split(" ");
+				BigDecimal t1 = new BigDecimal(lineSplit[1]).stripTrailingZeros();
+				BigDecimal t2 = new BigDecimal(lineSplit[2]).stripTrailingZeros();
+				currLine = "vt "+t1.toPlainString()+" "+t2.toPlainString();
+				
+				texturesRAW.add(currLine);
+				if (!alreadyUsedUVs.contains(currLine))
+				{
+					alreadyUsedUVs.add(currLine);
+					texturesNEW.add(currLine);
+				}
+			}
+			else if (currLine.startsWith("usemtl"))
+			{
+				faces.add(currLine);
+			}
+			else if (currLine.startsWith("f"))
+			{
+				faces.add(currLine);
+			}
+		}
+		
+		for (int i = 0; i < faces.size(); i++)
+		{
+			String line = faces.get(i);
+			if (line.startsWith("f "))
+			{
+				String[] split = line.trim().split(" ");
+				
+				String[] v1 = split[1].split("/");
+				String[] v2 = split[2].split("/");
+				String[] v3 = split[3].split("/");
+				
+				String v1UV = texturesRAW.get(Integer.decode(v1[1]) - 1);
+				String v2UV = texturesRAW.get(Integer.decode(v2[1]) - 1);
+				String v3UV = texturesRAW.get(Integer.decode(v3[1]) - 1);
+				
+				int newUV1 = texturesNEW.indexOf(v1UV)+1;
+				int newUV2 = texturesNEW.indexOf(v2UV)+1;
+				int newUV3 = texturesNEW.indexOf(v3UV)+1;
+				
+				v1[1] = Integer.toString(newUV1);
+				v2[1] = Integer.toString(newUV2);
+				v3[1] = Integer.toString(newUV3);
+				
+				String newLine = "f "+v1[0]+"/"+v1[1]+"/"+v1[2]+" "+v2[0]+"/"+v2[1]+"/"+v2[2]+" "+v3[0]+"/"+v3[1]+"/"+v3[2];
+				faces.set(i, newLine);
+			}
+		}
+		
+		rawFile.clear();
+		
+		rawFile.add(materialFile);
+		
+		for (int i = 0; i < verticies.size(); i++)
+		{
+			rawFile.add(verticies.get(i));
+		}
+		for (int i = 0; i < texturesNEW.size(); i++)
+		{
+			rawFile.add(texturesNEW.get(i));
+		}
+		for (int i = 0; i < normals.size(); i++)
+		{
+			rawFile.add(normals.get(i));
+		}
+		for (int i = 0; i < faces.size(); i++)
+		{
+			rawFile.add(faces.get(i));
+		}
+		System.out.println("done.");
 	}
 		
 	//If there exist two different materials that use the same exact image for the texture, 
@@ -304,26 +490,34 @@ public class Fixer
 	//be updated to use this new material
 	public static void fixMaterials(ArrayList<String> rawOBJFile, ArrayList<String> rawMTLFile)
 	{
+		System.out.print("Getting rid of textures with identical .png's... ");
 		ArrayList<Material> matList = new ArrayList<Material>();
 		
 		//Scan through material file and match the material names
 		//with their filenames
 		int size = rawMTLFile.size();
-		for(int i = 0; i < size; i++)
+		for (int i = 0; i < size; i++)
 		{
 			String currLine = rawMTLFile.get(i);
-			if(currLine.startsWith("newmtl"))
+			if (currLine.startsWith("newmtl"))
 			{
 				String[] arr = currLine.split(" ");
 				String name = arr[1];
 				matList.add(new Material(name));
 			}
-			else if(currLine.indexOf("map_Kd") >= 0)
+			else if (currLine.indexOf("map_Kd") >= 0)
 			{
 				String fileName = currLine.substring(currLine.indexOf("map_Kd")+7);
+				matList.get(matList.size()-1).fileNameOthers.clear();
 				matList.get(matList.size()-1).fileName = fileName;
+				for (int x = 1; x < matList.get(matList.size()-1).numImages; x++)
+				{
+					i++;
+					currLine = rawMTLFile.get(i);
+					matList.get(matList.size()-1).fileNameOthers.add(currLine);
+				}
 			}
-			else if(currLine.indexOf("Ns ") >= 0)
+			else if (currLine.indexOf("Ns ") >= 0)
 			{
 				matList.get(matList.size()-1).shineDamper = currLine;
 				
@@ -336,29 +530,45 @@ public class Fixer
 					matList.get(matList.size()-1).shineDamper = "Ns 20";
 				}
 			}
-			else if(currLine.indexOf("Ni ") >= 0)
+			else if (currLine.indexOf("Ni ") >= 0)
 			{
 				matList.get(matList.size()-1).reflectivity = currLine;
 			}
-			else if(currLine.indexOf("Tr ") >= 0)
+			else if (currLine.indexOf("Tr ") >= 0)
 			{
 				matList.get(matList.size()-1).transparency = currLine;
 			}
-			else if(currLine.indexOf("d ") >= 0)
+			else if (currLine.indexOf("d ") >= 0)
 			{
 				matList.get(matList.size()-1).fakeLighting = currLine;
 			}
-			else if(currLine.indexOf("glow ") >= 0)
+			else if (currLine.indexOf("glow ") >= 0)
 			{
 				matList.get(matList.size()-1).glowAmount = currLine;
 			}
-			else if(currLine.indexOf("scrollX ") >= 0)
+			else if (currLine.indexOf("scrollX ") >= 0)
 			{
 				matList.get(matList.size()-1).scrollX = currLine;
 			}
-			else if(currLine.indexOf("scrollY ") >= 0)
+			else if (currLine.indexOf("scrollY ") >= 0)
 			{
 				matList.get(matList.size()-1).scrollY = currLine;
+			}
+			else if (currLine.indexOf("numImages ") >= 0)
+			{
+				matList.get(matList.size()-1).numImages = Integer.decode(currLine.trim().split(" ")[1]);
+			}
+			else if (currLine.indexOf("mixSinusoidal") >= 0)
+			{
+				matList.get(matList.size()-1).mixType = "mixSinusoidal";
+			}
+			else if (currLine.indexOf("mixLinear") >= 0)
+			{
+				matList.get(matList.size()-1).mixType = "mixLinear";
+			}
+			else if (currLine.indexOf("fogScale") >= 0)
+			{
+				matList.get(matList.size()-1).fogScale = currLine;
 			}
 		}
 		
@@ -368,14 +578,25 @@ public class Fixer
 		//material name to filename
 		HashMap<String, String> matNameMap = new HashMap<String, String>();
 		
+		HashSet<Material> materialWithMultipleImages = new HashSet<Material>();
+		HashSet<String> matNamesWithMultipleImages = new HashSet<String>();
+		
 		//Fill material map
 		for (Material mat : matList)
 		{
-			if (materialMap.containsKey(mat.fileName) == false)
+			if (mat.numImages > 1)
 			{
-				materialMap.put(mat.fileName, mat);
+				materialWithMultipleImages.add(mat);
+				matNamesWithMultipleImages.add(mat.name);
 			}
-			matNameMap.put(mat.name, mat.fileName);
+			else
+			{
+				if (materialMap.containsKey(mat.fileName) == false)
+				{
+					materialMap.put(mat.fileName, mat);
+				}
+				matNameMap.put(mat.name, mat.fileName);
+			}
 		}
 		
 		size = rawOBJFile.size();
@@ -388,59 +609,119 @@ public class Fixer
 				String name = arr[1];
 				String fileName = "";
 				
-				//search through entire matList until you find the image filename
-				//associated with your material name
-				fileName = matNameMap.get(name);
-				
-				//now that you know what file you need for the image, 
-				//set your new material name to the first one in the material
-				//array that uses the same image filename
-				rawOBJFile.remove(i);
-				rawOBJFile.add(i, "usemtl "+materialMap.get(fileName).name);
+				//if the material has multiple images, just leave it alone
+				if (matNamesWithMultipleImages.contains(name))
+				{
+					
+				}
+				else
+				{
+					//search through entire matList until you find the image filename
+					//associated with your material name
+					fileName = matNameMap.get(name);
+					
+					//now that you know what file you need for the image, 
+					//set your new material name to the first one in the material
+					//array that uses the same image filename
+					rawOBJFile.remove(i);
+					rawOBJFile.add(i, "usemtl "+materialMap.get(fileName).name);
+				}
 			}
 		}
 		
 		rawMTLFile.clear();
-		rawMTLFile.add("# Material Count: "+materialMap.size());
+		rawMTLFile.add("# Material Count: "+(materialMap.size()+materialWithMultipleImages.size()));
 		rawMTLFile.add("");
 		
 		for (Map.Entry<String, Material> entry : materialMap.entrySet())
 		{
 			Material mat = entry.getValue();
 			rawMTLFile.add("newmtl "  + mat.name);
-			rawMTLFile.add(mat.shineDamper);
-			rawMTLFile.add(mat.reflectivity);
-			rawMTLFile.add(mat.transparency);
-			rawMTLFile.add(mat.fakeLighting);
-			rawMTLFile.add(mat.scrollX);
-			rawMTLFile.add(mat.scrollY);
+			if (!mat.shineDamper .equals("")) { rawMTLFile.add(mat.shineDamper); }
+			if (!mat.reflectivity.equals("")) { rawMTLFile.add(mat.reflectivity); }
+			if (!mat.transparency.equals("")) { rawMTLFile.add(mat.transparency); }
+			if (!mat.fakeLighting.equals("")) { rawMTLFile.add(mat.fakeLighting); }
+			if (!mat.scrollX     .equals("")) { rawMTLFile.add(mat.scrollX); }
+			if (!mat.scrollY     .equals("")) { rawMTLFile.add(mat.scrollY); }
+			if (!mat.fogScale    .equals("")) { rawMTLFile.add(mat.fogScale); }
+			if (!mat.glowAmount  .equals("")) { rawMTLFile.add(mat.glowAmount); }
 			rawMTLFile.add("map_Kd "  + mat.fileName);
 			rawMTLFile.add("");
 		}
+		
+		for (Material mat : materialWithMultipleImages)
+		{
+			rawMTLFile.add("newmtl "  + mat.name);
+			if (!mat.shineDamper .equals("")) { rawMTLFile.add(mat.shineDamper); }
+			if (!mat.reflectivity.equals("")) { rawMTLFile.add(mat.reflectivity); }
+			if (!mat.transparency.equals("")) { rawMTLFile.add(mat.transparency); }
+			if (!mat.fakeLighting.equals("")) { rawMTLFile.add(mat.fakeLighting); }
+			if (!mat.scrollX     .equals("")) { rawMTLFile.add(mat.scrollX); }
+			if (!mat.scrollY     .equals("")) { rawMTLFile.add(mat.scrollY); }
+			if (!mat.fogScale    .equals("")) { rawMTLFile.add(mat.fogScale); }
+			if (!mat.glowAmount  .equals("")) { rawMTLFile.add(mat.glowAmount); }
+			if (!mat.mixType     .equals("")) { rawMTLFile.add(mat.mixType); }
+			rawMTLFile.add("numImages "+mat.numImages);
+			rawMTLFile.add("map_Kd "  + mat.fileName);
+			for (int i = 0; i < mat.fileNameOthers.size(); i++)
+			{
+				rawMTLFile.add(mat.fileNameOthers.get(i));
+			}
+			rawMTLFile.add("");
+		}
+		
+		System.out.println("done.");
 	}
 	
-	public static ArrayList<String> removeMaterial(ArrayList<String> file, String mat)
+	//removes a material from a obj and mtl
+	public static void removeMaterial(ArrayList<String> obj, ArrayList<String> mtl, String matToRemove)
 	{
 		String currMat = "";
-		for(int i = 0; i < file.size(); i++)
+		for(int i = 0; i < obj.size(); i++)
 		{
-			String currLine = file.get(i);
+			String currLine = obj.get(i);
 			if(currLine.startsWith("usemtl"))
 			{
 				String[] arr = currLine.split(" ");
 				currMat = arr[1];
+				
+				if(currMat.equals(matToRemove))
+				{
+					obj.remove(i);
+					i--;
+				}
 			}
 			else if(currLine.startsWith("f"))
 			{
-				if(currMat.equals(mat))
+				if(currMat.equals(matToRemove))
 				{
-					file.remove(i);
+					obj.remove(i);
 					i--;
 				}
 			}
 		}
 		
-		return file;
+		currMat = "";
+		for(int i = 0; i < mtl.size(); i++)
+		{
+			String currLine = mtl.get(i);
+			if(currLine.contains("newmtl"))
+			{
+				String[] arr = currLine.trim().split(" ");
+				currMat = arr[1];
+				
+				if(currMat.equals(matToRemove))
+				{
+					mtl.remove(i);
+					i--;
+				}
+			}
+			else if(currMat.equals(matToRemove))
+			{
+				mtl.remove(i);
+				i--;
+			}
+		}
 	}
 	
 	//Changes material names that start with a prefix to a new name
@@ -529,6 +810,7 @@ public class Fixer
 	//Removes everything after and including # per line
 	public static ArrayList<String> removeComments(ArrayList<String> file)
 	{
+		System.out.print("Removing comments... ");
 		for (int i = 0; i < file.size(); i++)
 		{
 			String currLine = file.get(i);
@@ -548,6 +830,7 @@ public class Fixer
 			}
 		}
 		
+		System.out.println("done.");
 		return file;
 	}
 }
