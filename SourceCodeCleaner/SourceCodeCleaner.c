@@ -7,6 +7,12 @@ void dealWithFile(char* fileName);
 int endsWithHorC(char* fileName);
 int endsWithCPP(char* fileName);
 void cleanFile(char* fileName);
+//copies up to first null char (including it)
+//void copyFileBuf(char* src, char* dst);
+int fileIsSame(char* f1, char* f2, int numCharsToCheck);
+void clearBuf(char* buf);
+
+int MAX_FILE_SIZE = 1000000; //1MB max file size
 
 int main(void)
 {
@@ -61,7 +67,7 @@ void dealWithFile(char* fileName)
         if (endsWithHorC(fileName) == 1 ||
             endsWithCPP(fileName) == 1) //its a source file
         {
-            printf("source file = %s\n", fileName);
+            //printf("source file = %s\n", fileName);
             cleanFile(fileName);
         }
     }   
@@ -116,8 +122,12 @@ int endsWithCPP(char* fileName)
 void cleanFile(char* fileName)
 {
     FILE* file = fopen(fileName, "rb");
-    char ogFile[1000000]; //1MB max file size
+    char ogFile[MAX_FILE_SIZE];
+    char newFile[MAX_FILE_SIZE];
+    clearBuf(ogFile);
+    clearBuf(newFile);
     int fileSize = 0;
+    int ogSize = 0;
 
     if (file == NULL)
     {
@@ -128,56 +138,116 @@ void cleanFile(char* fileName)
     char nextChar = 0;
     while (fread(&nextChar, 1, 1, file) == 1)
     {
+        ogFile[ogSize] = nextChar;
+        ogSize++;
+        
         if (nextChar == '\t') //tab to 4 spaces
         {
-            ogFile[fileSize+0] = ' ';
-            ogFile[fileSize+1] = ' ';
-            ogFile[fileSize+2] = ' ';
-            ogFile[fileSize+3] = ' ';
+            newFile[fileSize+0] = ' ';
+            newFile[fileSize+1] = ' ';
+            newFile[fileSize+2] = ' ';
+            newFile[fileSize+3] = ' ';
             fileSize += 4;
         }
-        else if (nextChar == '\n') //windows newlines to unix
+        else if (nextChar == 10) //windows newlines to unix
         {
             if (fileSize > 0)
             {
-                if (ogFile[fileSize-1] == '\r')
+                if (newFile[fileSize-1] == 13) //windows = 13, 10.   unix = 10
                 {
-                    ogFile[fileSize-1] = '\n';
+                    newFile[fileSize-1] = 10;
                 }
                 else
                 {
-                    ogFile[fileSize] = nextChar;
+                    newFile[fileSize] = nextChar;
                     fileSize++;
                 }
                 
             }
             else //first byte in the code is a newline, leave it alone
             {
-                ogFile[fileSize] = nextChar;
+                newFile[fileSize] = nextChar;
                 fileSize++;
             }
         }
         else
         {
-            ogFile[fileSize] = nextChar;
+            newFile[fileSize] = nextChar;
             fileSize++;
+        }
+    }
+    
+    //change all mac to unix
+    for (int i = 0; i < fileSize; i++)
+    {
+        if (newFile[i] == 13)
+        {
+            newFile[i] = 10;
+        }
+        
+        if (newFile[i] == 0)
+        {
+            break;
         }
     }
 
     fclose(file);
-
-    file = fopen(fileName, "wb");  // create and/or overwrite
-
-    if (file == NULL)
+    
+    if (ogSize != fileSize || fileIsSame(ogFile, newFile, fileSize) == 0)
     {
-        printf("Error when writing to file '%s'\n", fileName);
-        return;
-    }
+        printf("cleaning source file = %s\n", fileName);
 
-    for (int i = 0; i < fileSize; i++)
+        file = fopen(fileName, "wb");  // create and/or overwrite
+
+        if (file == NULL)
+        {
+            printf("Error when writing to file '%s'\n", fileName);
+            return;
+        }
+
+        for (int i = 0; i < fileSize; i++)
+        {
+            fwrite(&newFile[i], 1, 1, file);
+        }
+
+        fclose(file);
+    }
+}
+
+//void copyFileBuf(char* src, char* dst)
+//{
+//    for (int i = 0; i < MAX_FILE_SIZE; i++)
+//    {
+//        dst[i] = src[i];
+//        if (dst[i] == 0)
+//        {
+//            break;
+//        }
+//    }
+//}
+
+void clearBuf(char* buf)
+{
+    for (int i = 0; i < MAX_FILE_SIZE; i++)
     {
-        fwrite(&ogFile[i], 1, 1, file);
+        buf[i] = 0;
     }
+}
 
-    fclose(file);
+int fileIsSame(char* f1, char* f2, int numCharsToCheck)
+{
+    for (int i = 0; i < numCharsToCheck; i++)
+    {
+        if (f1[i] != f2[i])
+        {
+            return 0;
+        }
+        
+        if (f1[i] == 0)
+        {
+            break;
+        }
+    }
+    
+    return 1;
 }
