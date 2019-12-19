@@ -464,6 +464,10 @@ public class SetScanner
 		{
 			outTripleSpringSA2(x, y, z, xrot, yrot, zrot, var1, var2, var3);
 		}
+		else if (type.equals("6")) //BigJump
+		{
+			outSpeedRampSA2(x, y, z, xrot, yrot, zrot, var1, var2, var3);
+		}
 		else if (type.equals("7")) //Dashpad
 		{
 			outDashpadSA2(x, y, z, xrot, yrot, zrot, var1, var2, var3);
@@ -503,11 +507,11 @@ public class SetScanner
 		}
 		else if (type.equals("8")) //Checkpoint
 		{
-			//outCheckpointSA2(x, y, z, xrot, yrot, zrot, var1, var2, var3);
+			outCheckpointSA2(x, y, z, xrot, yrot, zrot, var1, var2, var3);
 		}
 		else if (type.equals("E")) //Goal Ring
 		{
-			outGoalRingSA2(x, y, z, xrot, yrot, zrot, var1, var2, var3);
+			//outGoalRingSA2(x, y, z, xrot, yrot, zrot, var1, var2, var3);
 		}
 	}
 	
@@ -544,6 +548,10 @@ public class SetScanner
 		else if (type.equals("5")) //3 Springs
 		{
 			outTripleSpringSA2(x, y, z, xrot, yrot, zrot, var1, var2, var3);
+		}
+		else if (type.equals("6")) //BigJump
+		{
+			outSpeedRampSA2(x, y, z, xrot, yrot, zrot, var1, var2, var3);
 		}
 		else if (type.equals("7")) //Dashpad
 		{
@@ -664,30 +672,30 @@ public class SetScanner
 			  float x,    float y,    float z,
 			  float var1, float var2, float var3)
 	{
-		x = x*1.5f;
-		y = y*1.5f;
-		z = z*1.5f;
+		//x = x*1.5f;
+		//y = y*1.5f;
+		//z = z*1.5f;
 		
-		y = y+2280+8;
+		//y = y+2280+8;
 		
-		yrot+=270;
+		//yrot+=270;
 		
 		if (type.equals("0")) //single ring
 		{
-			if (z < -5222 && z > -5693)
-			{
-				y += 4;
-			}
-			else
-			{
-				y -= 6;
-			}
+			//if (z < -5222 && z > -5693)
+			//{
+			//	y += 4;
+			//}
+			//else
+			//{
+			//	y -= 6;
+			//}
 			outSingleRing(x, y, z, xrot, yrot, zrot, var1, var2, var3);
 		}
 		else if (type.equals("1")) //line of rings
 		{
-			y -= 6;
-			yrot-=270;
+			//y -= 6;
+			//yrot-=270;
 			outRingLineSA2(x, y, z, xrot, yrot, zrot, var1, var2, var3);
 		}
 		else if (type.equals("2")) //Ring circle
@@ -696,19 +704,23 @@ public class SetScanner
 		}
 		else if (type.equals("3") || type.equals("4")) //Spring
 		{
-			y += 4;
-			yrot-=270;
+			//y += 4;
+			//yrot-=270;
 			outSpringSA2(x, y, z, xrot, yrot, zrot, var1, var2, var3);
 		}
 		else if (type.equals("5")) //3 Springs
 		{
-			y += 4;
-			yrot-=270;
+			//y += 4;
+			//yrot-=270;
 			outTripleSpringSA2(x, y, z, xrot, yrot, zrot, var1, var2, var3);
+		}
+		else if (type.equals("6")) //BigJump
+		{
+			outSpeedRampSA2(x, y, z, xrot, yrot, zrot, var1, var2, var3);
 		}
 		else if (type.equals("7")) //Dashpad
 		{
-			yrot-=270;
+			//yrot-=270;
 			outDashpadSA2(x, y, z, xrot, yrot, zrot, var1, var2, var3);
 		}
 		else if (type.equals("38") || type.equals("39") || type.equals("3A") || type.equals("3B")) //Beetle
@@ -721,7 +733,7 @@ public class SetScanner
 		}
 		else if (type.equals("A") || type.equals("B") || type.equals("B")) //Item Box
 		{
-			yrot-=270;
+			//yrot-=270;
 			int boxType = 0;
 			if (type.equals("A"))
 			{
@@ -739,45 +751,45 @@ public class SetScanner
 		}
 		else if (type.equals("46")) //Rock
 		{
-			y+=0.25;
-			out.add("16 "+x+" "+y+" "+z+" "+yrot);
+			//y+=0.25;
+			//out.add("16 "+x+" "+y+" "+z+" "+yrot);
 		}
 		else if (type.equals("47")) //Tree
 		{
-			out.add("17 "+x+" "+y+" "+z+" "+yrot+" "+(1.2+0.35*(Math.random()-0.5)));
+			//out.add("17 "+x+" "+y+" "+z+" "+yrot+" "+(1.2+0.35*(Math.random()-0.5)));
 		}
 		else if (type.equals("42")) //Sunflower
 		{
-			out.add("18 "+x+" "+y+" "+z+" "+yrot);
+			//out.add("18 "+x+" "+y+" "+z+" "+yrot);
 		}
 		else if (type.equals("43")) //purple flower
 		{
-			out.add("19 "+x+" "+y+" "+z+" "+yrot);
+			//out.add("19 "+x+" "+y+" "+z+" "+yrot);
 		}
 		else if (type.equals("49")) //totem blank
 		{
-			out.add("20 "+x+" "+y+" "+z+" "+yrot);
+			//out.add("20 "+x+" "+y+" "+z+" "+yrot);
 		}
 		else if (type.equals("48")) //totem wings
 		{
-			out.add("21 "+x+" "+y+" "+z+" "+yrot);
+			//out.add("21 "+x+" "+y+" "+z+" "+yrot);
 		}
 		else if (type.equals("45")) //emerald grass
 		{
-			out.add("22 "+x+" "+y+" "+z+" "+yrot);
+			//out.add("22 "+x+" "+y+" "+z+" "+yrot);
 		}
 		else if (type.equals("4A")) //floating platform
 		{
-			y += 16;
-			out.add("24 "+x+" "+y+" "+z+" "+yrot);
+			//y += 16;
+			//out.add("24 "+x+" "+y+" "+z+" "+yrot);
 		}
 		else if (type.equals("4B")) //falling platform
 		{
-			out.add("23 "+x+" "+y+" "+z+" "+yrot);
+			//out.add("23 "+x+" "+y+" "+z+" "+yrot);
 		}
 		else if (type.equals("8")) //Checkpoint
 		{
-			yrot-=270;
+			//yrot-=270;
 			outCheckpointSA2(x, y, z, xrot, yrot, zrot, var1, var2, var3);
 		}
 	}
@@ -1231,6 +1243,10 @@ public class SetScanner
 		{
 			//outDashpadSA2(x, y, z, xrot, yrot, zrot, var1, var2, var3);
 		}
+		else if (type.equals("4")) //Checkpoint
+		{
+			outCheckpointSA2(x, y, z, xrot, yrot, zrot, var1, var2, var3);
+		}
 		else if (type.equals("B") || type.equals("1E") || type.equals("26") || type.equals("1D")) //Beetle, Gold, Moving beetle, gun hawk
 		{
 			outSpinner(x, y, z, xrot, yrot, zrot, var1, var2, var3);
@@ -1290,6 +1306,10 @@ public class SetScanner
 		else if (type.equals("3")) //Dashpad
 		{
 			//outDashpadSA2(x, y, z, xrot, yrot, zrot, var1, var2, var3);
+		}
+		else if (type.equals("4")) //Checkpoint
+		{
+			outCheckpointSA2(x, y, z, xrot, yrot, zrot, var1, var2, var3);
 		}
 		else if (type.equals("C") || type.equals("4A") || type.equals("1C") || type.equals("1D")) //Beetle,  Moving beetle/ gun hawk, rhino, hunter
 		{
@@ -1593,7 +1613,7 @@ public class SetScanner
 	
 	public static void outCheckpointSA2(float x, float y, float z, float rotX, float rotY, float rotZ, float var1, float var2, float var3)
 	{
-		out.add("87"+" "+x+" "+y+" "+z+" "+" "+(rotY-90));
+		out.add("10"+" "+x+" "+y+" "+z+" "+" "+(rotY-90));
 	}
 	
 	public static void outDashpadSADX(float x, float y, float z, float rotX, float rotY, float rotZ, float var1, float var2, float var3)
@@ -1657,14 +1677,13 @@ public class SetScanner
 	
 	public static void outSpeedRampSA2(float x, float y, float z, float rotX, float rotY, float rotZ, float var1, float var2, float var3)
 	{
-		//Vector3f look = endPointSADX(rotX, rotY, rotZ, 10);
-		
-		//float angH = (float)Math.toDegrees(Math.atan2(-look.z, look.x));
-		//float angV = (float)Math.toDegrees(Math.atan2(look.y, Math.sqrt(look.x*look.x+look.z*look.z)));
-		
-		float power = Math.max(var1, 7);
-		
-		out.add("29 "+x+" "+(y+1)+" "+z+" "+" "+(rotY+90)+" "+rotZ+" "+(power)+" "+60);
+		Vector3f dir = new Vector3f(1, 0, 0);
+	    Vector3f yAxis = new Vector3f(0, 1, 0);
+	    Vector3f zAxis = new Vector3f(0, 0, 1);
+	    dir = rotatePoint(dir, zAxis, Math.toRadians(rotZ));
+	    dir = rotatePoint(dir, yAxis, Math.toRadians(rotY));
+	    
+		out.add("11 "+x+" "+y+" "+z+" "+dir.x+" "+dir.y+" "+dir.z+" "+(var1*60)+" "+(var2/60));
 	}
 	
 	public static void outSpinner(float x, float y, float z, float rotX, float rotY, float rotZ, float var1, float var2, float var3)
