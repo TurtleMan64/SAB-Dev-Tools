@@ -14,7 +14,7 @@ public class SetScanner
 
 	public static void main(String[] args)
 	{
-		String level = "SkyRailSAB";
+		String level = "MetalHarborSAB";
 		
 		String s = "SET/"+level+"SET.txt";
 		File file = new File(s);
@@ -47,12 +47,12 @@ public class SetScanner
 				//parseEmeraldCoastAct1 (type, xrotDeg, yrotDeg, zrotDeg, x, y, z, var1, var2, var3);
 				//parseSpeedHighwayAct1 (type, xrotDeg, yrotDeg, zrotDeg, x, y, z, var1, var2, var3);
 				//parseSpeedHighwayTails(type, xrotDeg, yrotDeg, zrotDeg, x, y, z, var1, var2, var3);
-				//parseMetalHarbor      (type, xrotDeg, yrotDeg, zrotDeg, x, y, z, var1, var2, var3);
+				parseMetalHarbor      (type, xrotDeg, yrotDeg, zrotDeg, x, y, z, var1, var2, var3);
 				//parseRadicalHighway   (type, xrotDeg, yrotDeg, zrotDeg, x, y, z, var1, var2, var3);
 				//parseWeaponsBed       (type, xrotDeg, yrotDeg, zrotDeg, x, y, z, var1, var2, var3);
 				//parseGreenHill        (type, xrotDeg, yrotDeg, zrotDeg, x, y, z, var1, var2, var3);
 				//parsePyramidCave      (type, xrotDeg, yrotDeg, zrotDeg, x, y, z, var1, var2, var3);
-				parseSkyRail          (type, xrotDeg, yrotDeg, zrotDeg, x, y, z, var1, var2, var3);
+				//parseSkyRail          (type, xrotDeg, yrotDeg, zrotDeg, x, y, z, var1, var2, var3);
 				//parseCityEscape       (type, xrotDeg, yrotDeg, zrotDeg, x, y, z, var1, var2, var3);
 				//parseGreenForest      (type, xrotDeg, yrotDeg, zrotDeg, x, y, z, var1, var2, var3);
 				//parseWildCanyon       (type, xrot, yrot, zrot, xrotDeg, yrotDeg, zrotDeg, x, y, z, var1, var2, var3);
@@ -1677,10 +1677,10 @@ public class SetScanner
 	
 	public static void outSpeedRampSA2(float x, float y, float z, float rotX, float rotY, float rotZ, float var1, float var2, float var3)
 	{
-		Vector3f dir = new Vector3f(1, 0, 0);
+        Vector3f dir = new Vector3f(0, 0, -1);
+        Vector3f xAxis = new Vector3f(1, 0, 0);
 	    Vector3f yAxis = new Vector3f(0, 1, 0);
-	    Vector3f zAxis = new Vector3f(0, 0, 1);
-	    dir = rotatePoint(dir, zAxis, Math.toRadians(rotZ));
+	    dir = rotatePoint(dir, xAxis, Math.toRadians(rotX));
 	    dir = rotatePoint(dir, yAxis, Math.toRadians(rotY));
 	    
 		out.add("11 "+x+" "+y+" "+z+" "+dir.x+" "+dir.y+" "+dir.z+" "+(var1*60)+" "+(var2/60));
